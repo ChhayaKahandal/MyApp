@@ -1,0 +1,24 @@
+public with sharing class AppJfCon 
+{
+   
+    
+    @AuraEnabled(cacheable=true)
+    public static List<AppointmentSlot__c> getActiveAppointmentSlots() {
+        // Query active appointment slots
+        List<AppointmentSlot__c>li= [SELECT Id, Name, Appointment_Date__c
+                FROM AppointmentSlot__c 
+                WHERE isActive__c = true ];
+        system.debug(li);
+        return li;
+    }
+    
+     @AuraEnabled(cacheable=true)
+    public static Boolean checkDuplicateAppointment(Date appointmentDate, Time appointmentTime) {
+        Datetime dateTimeValue = Datetime.newInstance(appointmentDate, appointmentTime);
+        List<AppointmentDetail__c> existingAppointments = [SELECT Id FROM AppointmentDetail__c
+                                                            WHERE Appointment_Date__c = :dateTimeValue.date()
+                                                            AND Appointment_Time__c = :dateTimeValue.time() ];
+        return !existingAppointments.isEmpty();
+    }
+    
+}
