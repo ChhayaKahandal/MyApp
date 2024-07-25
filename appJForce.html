@@ -1,0 +1,61 @@
+<!-- appointmentForm.html -->
+<template>
+    <lightning-card title="New Appointment">
+        <div class="slds-var-m-around_medium">
+            <!--for Name box-->
+            <lightning-input type="text" label="Name" value={name} onchange={handleNameChange} required></lightning-input>
+            <!--for Contact box-->
+            <lightning-record-edit-form object-api-name="AppointmentDetail__c" onsubmit={handleSubmit}>
+                <lightning-messages></lightning-messages>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <lightning-input-field field-name="Contact__c" onchange={handleContactChange} required></lightning-input-field>
+                    </div>
+                </div>
+            </lightning-record-edit-form>
+
+            <!--for Subject box-->
+            <lightning-input type="text" label="Subject" value={subject} onchange={handleSubjectChange} required></lightning-input>
+            <!--for date box-->
+            <lightning-input type="date" label="Appointment Date " value={appointmentDate} onchange={handleDateChange} required></lightning-input>
+            <!--for time box-->
+            <lightning-input type="time" label="Appointment Time " value={appointmentTime} onchange={handleTimeChange} required></lightning-input>
+            <!--for description box-->
+            <lightning-textarea label="Description" value={description} onchange={handleDescriptionChange} required></lightning-textarea>
+             <!--for check-->
+             <div class="slds-var-m-top_medium">
+                <lightning-button label="Check Availability" variant="brand" onclick={handleCheckDuplicate}></lightning-button>
+    <p>{resultMessage}</p>
+            </div>
+    
+            <!--for button box-->
+            <div class="slds-var-m-top_medium">
+                <lightning-button label="Save" onclick={handleSave} variant="brand"></lightning-button>
+            </div>
+       </div>
+    </lightning-card>
+
+
+    <!--code for show the available appointmate dates-->
+    l<lightning-card title="Available Appointment Dates">
+    
+        <template if:true={appointmentSlots}>
+            <template for:each={appointmentSlots} for:item="slot">
+                <li key={slot.Id}>
+                
+                    <!--<b> Slot: </b>{slot.Name}-->
+                    <!--<br/>-->
+                    {slot.Appointment_Date__c}
+                    
+                </li>
+            
+            </template>
+        </template>
+
+        <template if:false={appointmentSlots}>
+            <p>No active appointment slots found.</p>
+        </template>
+    </lightning-card>
+
+
+</template>
